@@ -429,10 +429,14 @@ start_backend_mock.bat
     <div id="footerContainer"></div>
 
     <!-- Scripts -->
+    <script src="../src/utils/auth.js"></script>
     <script src="../src/components/header.js"></script>
     <script src="../src/components/footer.js"></script>
     
     <script>
+        // Require authentication
+        if (!requireAuth()) {}
+        
         function toggleAccordion(header) {
             const accordion = header.parentElement;
             const allAccordions = document.querySelectorAll('.accordion');

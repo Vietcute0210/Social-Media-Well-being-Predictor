@@ -1,0 +1,47 @@
+/* Icon Gradient Utility */
+.icon-gradient {
+    background: linear-gradient(45deg, #F58529, #DD2A7B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* User info styling */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.5rem 1rem;
+    background: rgba(245, 133, 41, 0.1);
+    border-radius: 20px;
+    margin-right: 1rem;
+}
+
+.user-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.user-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge-admin {
+    background: linear-gradient(45deg, #F58529, #DD2A7B);
+    color: white;
+}
+
+.badge-user {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+@media (max-width: 768px) {
+    .user-info {
+        display: none;
+    }
+}

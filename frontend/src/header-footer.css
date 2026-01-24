@@ -120,6 +120,16 @@
 
 .nav-icon {
     font-size: 1.2rem;
+    background: linear-gradient(45deg, #F58529, #DD2A7B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav-link.active .nav-icon {
+    background: white;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .nav-text {

@@ -307,7 +307,12 @@
     <div id="footerContainer"></div>
 
     <!-- Scripts -->
+    <script src="../src/utils/auth.js"></script>
     <script src="../src/components/header.js"></script>
     <script src="../src/components/footer.js"></script>
+    <script>
+        // Require authentication
+        if (!requireAuth()) {}
+    </script>
 </body>
 </html>

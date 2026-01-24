@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Media Well-being Predictor</title>
     <link rel="stylesheet" href="src/styles.css">
+    <link rel="stylesheet" href="src/header-footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -284,7 +286,14 @@
     <!-- Scripts -->
     <script src="src/components/header.js"></script>
     <script src="src/components/footer.js"></script>
+    <script src="src/utils/auth.js"></script>
     <script src="src/utils/storage.js"></script>
     <script src="src/app.js"></script>
+    <script>
+        // Require authentication
+        if (!requireAuth()) {
+            // Will redirect to login automatically
+        }
+    </script>
 </body>
 </html>
