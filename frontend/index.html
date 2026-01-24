@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Well-being Predictor</title>
+    <link rel="stylesheet" href="src/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <div id="headerContainer"></div>
+    
+    <div class="container">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="welcome-content">
+                <h1 class="logo">
+                    <span class="logo-icon">🧠</span>
+                    Social Media Well-being Predictor
+                </h1>
+                <p class="subtitle">Phân tích sức khỏe tinh thần từ thói quen sử dụng mạng xã hội</p>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Form Section -->
+            <section class="form-section" id="formSection">
+                <div class="form-container">
+                    <h2 class="section-title">Nhập thông tin của bạn</h2>
+                    <p class="section-description">Vui lòng điền đầy đủ thông tin để nhận được phân tích chính xác nhất</p>
+                    
+                    <form id="predictionForm">
+                        <!-- Personal Information -->
+                        <div class="form-group-section">
+                            <h3 class="group-title">👤 Thông tin cá nhân</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="age">Tuổi *</label>
+                                    <input type="number" id="age" name="age" required min="13" max="100" value="25">
+                                </div>
+                                <div class="form-group">
+                                    <label for="gender">Giới tính *</label>
+                                    <select id="gender" name="gender" required>
+                                        <option value="Male">Nam</option>
+                                        <option value="Female">Nữ</option>
+                                        <option value="Other">Khác</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="country">Quốc gia *</label>
+                                    <input type="text" id="country" name="country" required value="Vietnam">
+                                </div>
+                                <div class="form-group">
+                                    <label for="urban_rural">Khu vực *</label>
+                                    <select id="urban_rural" name="urban_rural" required>
+                                        <option value="Urban">Thành thị</option>
+                                        <option value="Rural">Nông thôn</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="income_level">Mức thu nhập *</label>
+                                    <select id="income_level" name="income_level" required>
+                                        <option value="Low">Thấp</option>
+                                        <option value="Medium" selected>Trung bình</option>
+                                        <option value="High">Cao</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="employment_status">Tình trạng việc làm *</label>
+                                    <select id="employment_status" name="employment_status" required>
+                                        <option value="Unemployed">Thất nghiệp</option>
+                                        <option value="Part-time">Bán thời gian</option>
+                                        <option value="Full-time" selected>Toàn thời gian</option>
+                                        <option value="Self-employed">Tự kinh doanh</option>
+                                        <option value="Student">Sinh viên</option>
+                                        <option value="Retired">Đã nghỉ hưu</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="education_level">Trình độ học vấn *</label>
+                                    <select id="education_level" name="education_level" required>
+                                        <option value="High School">Trung học</option>
+                                        <option value="Associate">Cao đẳng</option>
+                                        <option value="Bachelor" selected>Đại học</option>
+                                        <option value="Master">Thạc sĩ</option>
+                                        <option value="PhD">Tiến sĩ</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="relationship_status">Tình trạng hôn nhân *</label>
+                                    <select id="relationship_status" name="relationship_status" required>
+                                        <option value="Single" selected>Độc thân</option>
+                                        <option value="In a relationship">Đang hẹn hò</option>
+                                        <option value="Married">Đã kết hôn</option>
+                                        <option value="Divorced">Đã ly hôn</option>
+                                        <option value="Widowed">Góa</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="has_children">Có con? *</label>
+                                    <select id="has_children" name="has_children" required>
+                                        <option value="No" selected>Không</option>
+                                        <option value="Yes">Có</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Health Metrics -->
+                        <div class="form-group-section">
+                            <h3 class="group-title">💪 Chỉ số sức khỏe</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="sleep_hours_per_night">Giờ ngủ/đêm *</label>
+                                    <input type="number" id="sleep_hours_per_night" name="sleep_hours_per_night" required min="0" max="24" step="0.5" value="7">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exercise_hours_per_week">Giờ tập/tuần *</label>
+                                    <input type="number" id="exercise_hours_per_week" name="exercise_hours_per_week" required min="0" step="0.5" value="3">
+                                </div>
+                                <div class="form-group">
+                                    <label for="daily_steps_count">Số bước/ngày *</label>
+                                    <input type="number" id="daily_steps_count" name="daily_steps_count" required min="0" value="5000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="diet_quality">Chất lượng chế độ ăn *</label>
+                                    <select id="diet_quality" name="diet_quality" required>
+                                        <option value="Poor">Kém</option>
+                                        <option value="Average" selected>Trung bình</option>
+                                        <option value="Good">Tốt</option>
+                                        <option value="Excellent">Xuất sắc</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="smoking">Hút thuốc? *</label>
+                                    <select id="smoking" name="smoking" required>
+                                        <option value="No" selected>Không</option>
+                                        <option value="Yes">Có</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="alcohol_frequency">Tần suất uống rượu *</label>
+                                    <select id="alcohol_frequency" name="alcohol_frequency" required>
+                                        <option value="Never">Không bao giờ</option>
+                                        <option value="Rarely" selected>Hiếm khi</option>
+                                        <option value="Occasionally">Thỉnh thoảng</option>
+                                        <option value="Frequently">Thường xuyên</option>
+                                        <option value="Daily">Hàng ngày</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="body_mass_index">BMI (Chỉ số khối cơ thể) *</label>
+                                    <input type="number" id="body_mass_index" name="body_mass_index" required min="10" max="60" step="0.1" value="22.5">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Work & Social -->
+                        <div class="form-group-section">
+                            <h3 class="group-title">💼 Công việc & Xã hội</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="weekly_work_hours">Giờ làm việc/tuần *</label>
+                                    <input type="number" id="weekly_work_hours" name="weekly_work_hours" required min="0" step="0.5" value="40">
+                                </div>
+                                <div class="form-group">
+                                    <label for="hobbies_count">Số sở thích *</label>
+                                    <input type="number" id="hobbies_count" name="hobbies_count" required min="0" value="2">
+                                </div>
+                                <div class="form-group">
+                                    <label for="social_events_per_month">Sự kiện xã hội/tháng *</label>
+                                    <input type="number" id="social_events_per_month" name="social_events_per_month" required min="0" value="4">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Instagram Usage -->
+                        <div class="form-group-section">
+                            <h3 class="group-title">📱 Thói quen sử dụng Instagram</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="daily_active_minutes_instagram">Phút hoạt động/ngày *</label>
+                                    <input type="number" id="daily_active_minutes_instagram" name="daily_active_minutes_instagram" required min="0" step="1" value="60">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sessions_per_day">Số phiên/ngày *</label>
+                                    <input type="number" id="sessions_per_day" name="sessions_per_day" required min="0" value="5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="reels_watched_per_day">Reels xem/ngày *</label>
+                                    <input type="number" id="reels_watched_per_day" name="reels_watched_per_day" required min="0" value="10">
+                                </div>
+                                <div class="form-group">
+                                    <label for="stories_viewed_per_day">Stories xem/ngày *</label>
+                                    <input type="number" id="stories_viewed_per_day" name="stories_viewed_per_day" required min="0" value="20">
+                                </div>
+                                <div class="form-group">
+                                    <label for="time_on_feed_per_day">Thời gian xem feed/ngày (phút) *</label>
+                                    <input type="number" id="time_on_feed_per_day" name="time_on_feed_per_day" required min="0" step="1" value="30">
+                                </div>
+                                <div class="form-group">
+                                    <label for="time_on_reels_per_day">Thời gian xem reels/ngày (phút) *</label>
+                                    <input type="number" id="time_on_reels_per_day" name="time_on_reels_per_day" required min="0" step="1" value="30">
+                                </div>
+                                <div class="form-group">
+                                    <label for="likes_given_per_day">Likes cho/ngày *</label>
+                                    <input type="number" id="likes_given_per_day" name="likes_given_per_day" required min="0" value="15">
+                                </div>
+                                <div class="form-group">
+                                    <label for="comments_written_per_day">Comments viết/ngày *</label>
+                                    <input type="number" id="comments_written_per_day" name="comments_written_per_day" required min="0" value="3">
+                                </div>
+                                <div class="form-group">
+                                    <label for="notification_response_rate">Tỷ lệ phản hồi thông báo (0-1) *</label>
+                                    <input type="number" id="notification_response_rate" name="notification_response_rate" required min="0" max="1" step="0.01" value="0.5">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary" id="submitBtn">
+                                <span class="btn-text">Phân tích ngay</span>
+                                <span class="btn-loader" style="display: none;">⏳ Đang xử lý...</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-container">
+                    <h2 class="section-title">Kết quả phân tích</h2>
+                    
+                    <!-- Scores -->
+                    <div class="scores-grid">
+                        <div class="score-card happiness-card">
+                            <div class="score-icon">😊</div>
+                            <div class="score-label">Chỉ số Hạnh phúc</div>
+                            <div class="score-value" id="happinessScore">-</div>
+                            <div class="score-bar">
+                                <div class="score-fill happiness-fill" id="happinessBar"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="score-card stress-card">
+                            <div class="score-icon">😰</div>
+                            <div class="score-label">Chỉ số Căng thẳng</div>
+                            <div class="score-value" id="stressScore">-</div>
+                            <div class="score-bar">
+                                <div class="score-fill stress-fill" id="stressBar"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="score-card persona-card">
+                            <div class="score-icon">👤</div>
+                            <div class="score-label">Loại người dùng</div>
+                            <div class="persona-value" id="personaType">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations -->
+                    <div class="recommendations-section">
+                        <h3 class="recommendations-title">💡 Gợi ý cải thiện</h3>
+                        <ul class="recommendations-list" id="recommendationsList"></ul>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="analyzeAgainBtn">
+                            Phân tích lại
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+    </div>
+    
+    <!-- Footer -->
+    <div id="footerContainer"></div>
+
+    <!-- Scripts -->
+    <script src="src/components/header.js"></script>
+    <script src="src/components/footer.js"></script>
+    <script src="src/utils/storage.js"></script>
+    <script src="src/app.js"></script>
+</body>
+</html>

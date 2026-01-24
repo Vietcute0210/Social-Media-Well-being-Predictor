@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hướng dẫn sử dụng hệ thống phân tích sức khỏe tinh thần">
+    <title>Hướng dẫn - Social Media Well-being Predictor</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../src/styles.css">`n    <link rel="stylesheet" href="../src/header-footer.css">
+    
+    <style>
+        .help-page {
+            min-height: 100vh;
+            padding-top: 80px;
+            padding-bottom: 60px;
+            background: #f5f7fa;
+        }
+
+        .help-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #F58529, #DD2A7B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .accordion {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .accordion-header {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            border-bottom: 1px solid #eee;
+            transition: background 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background: #f8f9fa;
+        }
+
+        .accordion-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .accordion-icon {
+            font-size: 1.5rem;
+        }
+
+        .accordion-toggle {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .accordion-body {
+            padding: 20px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .accordion.active .accordion-toggle {
+            transform: rotate(180deg);
+        }
+
+        .accordion.active .accordion-content {
+            max-height: 2000px;
+        }
+
+        .help-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .help-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .help-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .code-block {
+            background: #f1f3f5;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #e7f3ff;
+            border-color: #2196F3;
+            color: #0d47a1;
+        }
+
+        .alert-warning {
+            background: #fff4e5;
+            border-color: #ff9800;
+            color: #e65100;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            border-color: #4caf50;
+            color: #1b5e20;
+        }
+
+        .field-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .field-table th,
+        .field-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .field-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .accordion-title {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="headerContainer"></div>
+
+    <!-- Main Content -->
+    <div class="help-page">
+        <div class="help-container">
+            <h1 class="page-title">❓ Hướng dẫn sử dụng</h1>
+            <p class="page-subtitle">Tìm hiểu cách sử dụng hệ thống phân tích sức khỏe tinh thần</p>
+
+            <!-- How to Use -->
+            <div class="accordion active">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                        <span class="accordion-icon">🚀</span>
+                        <span>Cách sử dụng ứng dụng</span>
+                    </div>
+                    <span class="accordion-toggle">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <ul class="help-list">
+                            <li><strong>Bước 1:</strong> Truy cập trang chủ và xem form phân tích</li>
+                            <li><strong>Bước 2:</strong> Nhập thông tin cá nhân (tuổi, giới tính, thu nhập, BMI)</li>
+                            <li><strong>Bước 3:</strong> Nhập thông tin sức khỏe (giấc ngủ, tập thể dục, thời gian ngoài trời)</li>
+                            <li><strong>Bước 4:</strong> Nhập thói quen sử dụng Instagram (thời gian, số bài đăng, followers...)</li>
+                            <li><strong>Bước 5:</strong> Nhập thông tin tương tác (likes, comments, shares, saves)</li>
+                            <li><strong>Bước 6:</strong> Click "Phân tích ngay" và chờ kết quả</li>
+                        </ul>
+                        
+                        <div class="alert alert-success">
+                            <strong>💡 Mẹo:</strong> Bạn có thể sử dụng giá trị mặc định đã được điền sẵn để test nhanh!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Fields -->
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                        <span class="accordion-icon">📝</span>
+                        <span>Giải thích các trường nhập liệu</span>
+                    </div>
+                    <span class="accordion-toggle">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <table class="field-table">
+                            <thead>
+                                <tr>
+                                    <th>Nhóm</th>
+                                    <th>Trường</th>
+                                    <th>Mô tả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td rowspan="4"><strong>Cá nhân</strong></td>
+                                    <td>Tuổi</td>
+                                    <td>18-80 tuổi</td>
+                                </tr>
+                                <tr>
+                                    <td>Giới tính</td>
+                                    <td>0=Nữ, 1=Nam</td>
+                                </tr>
+                                <tr>
+                                    <td>Thu nhập</td>
+                                    <td>Thu nhập hàng tháng (triệu đồng)</td>
+                                </tr>
+                                <tr>
+                                    <td>BMI</td>
+                                    <td>Chỉ số khối cơ thể (15-40)</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3"><strong>Sức khỏe</strong></td>
+                                    <td>Sleep Hours</td>
+                                    <td>Số giờ ngủ/ngày (4-12)</td>
+                                </tr>
+                                <tr>
+                                    <td>Exercise</td>
+                                    <td>Số lần tập/tuần (0-7)</td>
+                                </tr>
+                                <tr>
+                                    <td>Outdoor Time</td>
+                                    <td>Thời gian ngoài trời/ngày (phút)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="alert alert-info">
+                            <strong>ℹ️ Lưu ý:</strong> Tất cả các trường đều bắt buộc. Hãy nhập giá trị chính xác để có kết quả tốt nhất.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Understanding Results -->
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                        <span class="accordion-icon">📊</span>
+                        <span>Hiểu kết quả phân tích</span>
+                    </div>
+                    <span class="accordion-toggle">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <h4>Chỉ số Happiness Score (0-10)</h4>
+                        <ul class="help-list">
+                            <li><strong>8-10:</strong> Mức độ hạnh phúc rất cao ✨</li>
+                            <li><strong>5-7:</strong> Mức độ hạnh phúc trung bình 😊</li>
+                            <li><strong>0-4:</strong> Mức độ hạnh phúc thấp, cần cải thiện 😔</li>
+                        </ul>
+                        
+                        <h4>Chỉ số Stress Score (0-10)</h4>
+                        <ul class="help-list">
+                            <li><strong>0-3:</strong> Căng thẳng thấp, tốt cho sức khỏe 😌</li>
+                            <li><strong>4-6:</strong> Căng thẳng trung bình ⚠️</li>
+                            <li><strong>7-10:</strong> Căng thẳng cao, cần chú ý 😰</li>
+                        </ul>
+                        
+                        <h4>Persona (Nhóm người dùng)</h4>
+                        <ul class="help-list">
+                            <li><strong>Power User:</strong> Sử dụng Instagram rất nhiều, tương tác cao</li>
+                            <li><strong>Light User:</strong> Sử dụng ít, tương tác thấp</li>
+                            <li><strong>Influencer:</strong> Có nhiều followers, đăng bài thường xuyên</li>
+                            <li><strong>Ghost User:</strong> Xem nhiều nhưng ít tương tác</li>
+                            <li><strong>Social Butterfly:</strong> Tương tác nhiều, kết nối tốt</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Validation Errors -->
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                        <span class="accordion-icon">⚠️</span>
+                        <span>Lỗi validation và cách xử lý</span>
+                    </div>
+                    <span class="accordion-toggle">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="alert alert-warning">
+                            <strong>Lỗi thường gặp:</strong>
+                        </div>
+                        
+                        <h4>1. "Vui lòng nhập đầy đủ thông tin"</h4>
+                        <p>→ Kiểm tra lại tất cả các trường, đảm bảo không có trường nào để trống.</p>
+                        
+                        <h4>2. "Giá trị không hợp lệ"</h4>
+                        <p>→ Kiểm tra giá trị nhập vào có nằm trong khoảng cho phép không (VD: tuổi 18-80, BMI 15-40)</p>
+                        
+                        <h4>3. "Không thể kết nối server"</h4>
+                        <p>→ Kiểm tra backend có đang chạy không:</p>
+                        <div class="code-block">
+# Windows
+start_backend.bat
+
+# hoặc dùng Mock API
+start_backend_mock.bat
+                        </div>
+                        
+                        <h4>4. "Model không tìm thấy"</h4>
+                        <p>→ Đảm bảo các file model đã được train và lưu trong thư mục backend/models/</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Troubleshooting -->
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                        <span class="accordion-icon">🔧</span>
+                        <span>Xử lý sự cố</span>
+                    </div>
+                    <span class="accordion-toggle">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <h4>Backend không khởi động được</h4>
+                        <ul class="help-list">
+                            <li>Kiểm tra Python đã cài đặt chưa: <code>python --version</code></li>
+                            <li>Cài đặt dependencies: <code>pip install -r requirements.txt</code></li>
+                            <li>Dùng Mock API thay thế: <code>start_backend_mock.bat</code></li>
+                        </ul>
+                        
+                        <h4>Frontend không hiển thị</h4>
+                        <ul class="help-list">
+                            <li>Chạy HTTP server: <code>start_frontend.bat</code></li>
+                            <li>Mở trình duyệt: <code>http://localhost:5500</code></li>
+                            <li>Hoặc mở trực tiếp file: <code>frontend/index.html</code></li>
+                        </ul>
+                        
+                        <h4>Lịch sử không lưu</h4>
+                        <ul class="help-list">
+                            <li>Kiểm tra localStorage có bật không</li>
+                            <li>Xóa cache trình duyệt và thử lại</li>
+                            <li>Mở Developer Console (F12) để xem lỗi</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                        <span class="accordion-icon">💬</span>
+                        <span>Câu hỏi thường gặp (FAQ)</span>
+                    </div>
+                    <span class="accordion-toggle">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <h4>Q: Dữ liệu của tôi có được lưu ở đâu?</h4>
+                        <p>A: Tất cả dữ liệu được lưu trong localStorage của trình duyệt. Không có dữ liệu nào được gửi lên server để lưu trữ.</p>
+                        
+                        <h4>Q: Tôi có thể xuất dữ liệu lịch sử không?</h4>
+                        <p>A: Có! Vào trang Lịch sử và click nút "Xuất dữ liệu" để tải về file JSON.</p>
+                        
+                        <h4>Q: Kết quả phân tích có chính xác không?</h4>
+                        <p>A: Model được train trên dataset 10,000+ người dùng với độ chính xác 85-92%. Tuy nhiên đây chỉ là công cụ tham khảo, không thay thế chẩn đoán y tế.</p>
+                        
+                        <h4>Q: Tôi có thể sử dụng offline không?</h4>
+                        <p>A: Có! Chỉ cần đã load trang lần đầu tiên. Tuy nhiên phải chạy backend local để có API phân tích.</p>
+                        
+                        <h4>Q: Làm sao để xóa tất cả lịch sử?</h4>
+                        <p>A: Vào trang Lịch sử → Click "Xóa tất cả" → Xác nhận 2 lần.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footerContainer"></div>
+
+    <!-- Scripts -->
+    <script src="../src/components/header.js"></script>
+    <script src="../src/components/footer.js"></script>
+    
+    <script>
+        function toggleAccordion(header) {
+            const accordion = header.parentElement;
+            const allAccordions = document.querySelectorAll('.accordion');
+            
+            // Close all other accordions
+            allAccordions.forEach(acc => {
+                if (acc !== accordion) {
+                    acc.classList.remove('active');
+                }
+            });
+            
+            // Toggle current accordion
+            accordion.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
