@@ -7,7 +7,7 @@ from app.schemas import UserInput, PredictionResponse, HealthResponse
 from app.ml.loader import ModelLoader
 from app.ml.predictor import Predictor
 from app.utils import encode_categorical_features, validate_input_ranges
-from app.routers import auth, predictions
+from app.routers import auth, predictions, admin
 from app.database import engine, Base, get_db
 from app.models_db import User, Prediction
 from sqlalchemy.orm import Session
@@ -68,6 +68,9 @@ app.include_router(auth.router)
 
 # Include predictions router
 app.include_router(predictions.router)
+
+# Include admin router
+app.include_router(admin.router)
 
 
 @app.get("/", response_model=HealthResponse)

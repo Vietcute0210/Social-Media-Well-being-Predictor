@@ -35,19 +35,66 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already registered")
     
+    # Determine role (all new users are 'user' by default)
+    role = "user"
+    
     # Create new user
     hashed_pw = hash_password(user_data.password)
-    new_user = User(username=user_data.username, hashed_password=hashed_pw)
+    new_user = User(
+        username=user_data.username, 
+        hashed_password=hashed_pw,
+        role=role
+    )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     
-    return {"message": "User registered successfully", "username": new_user.username}
+    return {
+        "message": "User registered successfully", 
+        "username": new_user.username,
+        "role": new_user.role
+    }
 
 @router.post("/login")
 def login(user_data: UserLogin, response: Response, db: Session = Depends(get_db)):
     """Login user"""
-    # Find user
+    # Hardcoded admin check
+    if user_data.username == "admindeptrai" and user_data.password == "123456":
+        # Admin login - check if admin user exists in DB
+        admin_user = db.query(User).filter(User.username == "admindeptrai").first()
+        if not admin_user:
+            # Create admin user if not exists
+            hashed_pw = hash_password("123456")
+            admin_user = User(
+                username="admindeptrai",
+                hashed_password=hashed_pw,
+                role="admin"
+            )
+            db.add(admin_user)
+            db.commit()
+            db.refresh(admin_user)
+        else:
+            # Update role to admin if user exists but isn't admin
+            if admin_user.role != "admin":
+                admin_user.role = "admin"
+                db.commit()
+        
+        # Set session cookie
+        response.set_cookie(
+            key="user_session",
+            value=admin_user.username,
+            httponly=True,
+            max_age=3600 * 24  # 24 hours
+        )
+        
+        return {
+            "message": "Login successful",
+            "username": admin_user.username,
+            "role": admin_user.role,
+            "user_id": admin_user.id
+        }
+    
+    # Regular user login
     user = db.query(User).filter(User.username == user_data.username).first()
     if not user or not verify_password(user_data.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid username or password")
@@ -60,7 +107,12 @@ def login(user_data: UserLogin, response: Response, db: Session = Depends(get_db
         max_age=3600 * 24  # 24 hours
     )
     
-    return {"message": "Login successful", "username": user.username}
+    return {
+        "message": "Login successful",
+        "username": user.username,
+        "role": user.role,
+        "user_id": user.id
+    }
 
 @router.post("/logout")
 def logout(response: Response):
@@ -69,9 +121,19 @@ def logout(response: Response):
     return {"message": "Logged out successfully"}
 
 @router.get("/me")
-def get_current_user(request: Request):
-    """Get current logged in user"""
+def get_current_user(request: Request, db: Session = Depends(get_db)):
+    """Get current logged in user with role"""
     username = request.cookies.get("user_session")
     if not username:
         raise HTTPException(status_code=401, detail="Not authenticated")
-    return {"username": username}
+    
+    # Get user from database to return full info including role
+    user = db.query(User).filter(User.username == username).first()
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
+    
+    return {
+        "username": user.username,
+        "role": user.role,
+        "user_id": user.id
+    }
