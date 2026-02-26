@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from typing import List
 
 from app.database import get_db
-from app.models_db import User, Prediction
+from app.models_db import User, Prediction, vn_now
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
 
@@ -37,13 +37,13 @@ def get_admin_stats(admin: User = Depends(require_admin), db: Session = Depends(
     avg_stress = db.query(func.avg(Prediction.stress_score)).scalar() or 0
     
     # Active users today
-    today = datetime.utcnow().date()
+    today = vn_now().date()
     active_today = db.query(func.count(func.distinct(Prediction.user_id)))\
         .filter(func.date(Prediction.timestamp) == today)\
         .scalar()
     
     # Predictions this week
-    week_ago = datetime.utcnow() - timedelta(days=7)
+    week_ago = vn_now() - timedelta(days=7)
     predictions_this_week = db.query(func.count(Prediction.id))\
         .filter(Prediction.timestamp >= week_ago)\
         .scalar()
@@ -145,7 +145,7 @@ def get_prediction_trends(
 ):
     """Get prediction trends for the last N days"""
     
-    cutoff_date = datetime.utcnow() - timedelta(days=days)
+    cutoff_date = vn_now() - timedelta(days=days)
     
     # Daily prediction counts
     daily_predictions = db.query(

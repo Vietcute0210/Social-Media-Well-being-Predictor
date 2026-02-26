@@ -153,6 +153,12 @@ function displayHistory(predictions) {
         const stressClass = p.stress_score >= 7 ? 'score-low' : 
                            p.stress_score >= 4 ? 'score-medium' : 'score-high';
         
+        // Persona badge color
+        let personaBadgeClass = 'persona-badge';
+        if (p.persona === 'Doom-Scroller') personaBadgeClass += ' persona-doom';
+        else if (p.persona === 'Moderate User') personaBadgeClass += ' persona-moderate';
+        else personaBadgeClass += ' persona-light';
+        
         return `
             <tr>
                 <td>
@@ -161,10 +167,16 @@ function displayHistory(predictions) {
                 </td>
                 <td><span class="score-value ${happinessClass}">${p.happiness_score}</span></td>
                 <td><span class="score-value ${stressClass}">${p.stress_score}</span></td>
-                <td><span class="persona-badge">${p.persona}</span></td>
+                <td><span class="${personaBadgeClass}">${p.persona}</span></td>
                 <td>
-                    <button class="action-btn btn-view" onclick="viewPrediction(${p.id})">👁️ Xem</button>
-                    <button class="action-btn btn-delete" onclick="deletePredictionConfirm(${p.id})">🗑️ Xóa</button>
+                    <button class="action-btn btn-view" onclick="viewPrediction(${p.id})" title="Xem chi tiết">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        Xem
+                    </button>
+                    <button class="action-btn btn-delete" onclick="deletePredictionConfirm(${p.id})" title="Xóa">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                        Xóa
+                    </button>
                 </td>
             </tr>
         `;
@@ -256,6 +268,7 @@ async function exportHistory() {
 }
 
 function formatTimestamp(timestamp) {
+    // Parse timestamp - treat as Vietnam time directly since server sends VN timezone
     const date = new Date(timestamp);
     const now = new Date();
     const diff = now - date;
@@ -267,18 +280,28 @@ function formatTimestamp(timestamp) {
     const days = Math.floor(hours / 24);
     
     let relative;
-    if (days > 0) {
-        relative = `${days} ngày trước`;
-    } else if (hours > 0) {
-        relative = `${hours} giờ trước`;
-    } else if (minutes > 0) {
-        relative = `${minutes} phút trước`;
-    } else {
+    if (seconds < 0 || seconds < 60) {
         relative = 'Vừa xong';
+    } else if (minutes < 60) {
+        relative = `${minutes} phút trước`;
+    } else if (hours < 24) {
+        relative = `${hours} giờ trước`;
+    } else if (days < 30) {
+        relative = `${days} ngày trước`;
+    } else {
+        relative = `${Math.floor(days / 30)} tháng trước`;
     }
     
-    // Absolute time
-    const absolute = date.toLocaleString('vi-VN');
+    // Absolute time in Vietnam format
+    const absolute = date.toLocaleString('vi-VN', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
     
     return { relative, absolute };
 }

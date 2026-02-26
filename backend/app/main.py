@@ -8,8 +8,8 @@ from app.ml.loader import ModelLoader
 from app.ml.predictor import Predictor
 from app.utils import encode_categorical_features, validate_input_ranges
 from app.routers import auth, predictions, admin
-from app.database import engine, Base, get_db
-from app.models_db import User, Prediction
+from app.database import engine, Base, get_db, SessionLocal
+from app.models_db import User, Prediction, vn_now
 from sqlalchemy.orm import Session
 
 
@@ -29,6 +29,16 @@ async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
     print("✓ Database tables created")
     
+    # Warm up database connection to avoid cold start
+    print("🔌 Warming up database connection...")
+    try:
+        db_warmup = SessionLocal()
+        db_warmup.query(User).first()
+        db_warmup.close()
+        print("✓ Database connection warm-up complete")
+    except Exception as e:
+        print(f"⚠ Database warm-up warning: {str(e)} (will retry on first request)")
+    
     try:
         loader = ModelLoader(models_dir="models")
         loader.load_models()
@@ -38,6 +48,8 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"✗ Failed to load models: {str(e)}")
         raise e
+    
+    print("🟢 Server is ready!")
     
     yield
     
@@ -141,6 +153,7 @@ async def predict_wellbeing(user_input: UserInput, request: Request):
             if user:
                 db_prediction = Prediction(
                     user_id=user.id,
+                    timestamp=vn_now(),
                     input_data=user_data,
                     happiness_score=prediction["happiness_score"],
                     stress_score=prediction["stress_score"],

@@ -3,19 +3,44 @@ const API_BASE_URL = 'http://localhost:8000';
 
 // Check authentication on page load
 window.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/auth/me`, {
-            credentials: 'include'
-        });
-        
-        if (!response.ok) {
-            // Not logged in, redirect to login
+    // First check localStorage - if user exists, don't block immediately
+    const localUser = localStorage.getItem('current_user');
+    
+    // Retry 3 lần với delay tăng dần cho Supabase cold start
+    const maxRetries = 3;
+    const retryDelays = [1500, 2500, 0];
+    
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+            
+            const response = await fetch(`${API_BASE_URL}/auth/me`, {
+                credentials: 'include',
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
+            if (response.ok) {
+                return; // Authenticated, proceed normally
+            }
+            
+            // Server says not authenticated
             window.location.href = 'login.html';
+            return;
+        } catch (error) {
+            if (attempt < maxRetries) {
+                await new Promise(r => setTimeout(r, retryDelays[attempt - 1]));
+            }
         }
-    } catch (error) {
-        // Error checking auth, redirect to login
+    }
+    
+    // All attempts failed - if no local user, redirect
+    if (!localUser) {
         window.location.href = 'login.html';
     }
+    // If there IS a local user, let them continue (graceful degradation)
 });
 
 // DOM Elements

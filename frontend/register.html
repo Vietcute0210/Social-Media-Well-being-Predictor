@@ -103,6 +103,9 @@
     <script>
         const API_BASE = 'http://localhost:8000';
 
+        // Pre-warm server
+        fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(8000) }).catch(() => {});
+
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -111,6 +114,7 @@
             const confirmPassword = document.getElementById('confirmPassword').value;
             const errorDiv = document.getElementById('errorMessage');
             const successDiv = document.getElementById('successMessage');
+            const registerBtn = document.querySelector('.btn-register');
             
             // Hide previous messages
             errorDiv.style.display = 'none';
@@ -123,34 +127,58 @@
                 return;
             }
             
-            try {
-                const response = await fetch(`${API_BASE}/auth/register`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    // Registration successful
-                    successDiv.textContent = 'Đăng ký thành công! Đang chuyển đến trang đăng nhập...';
-                    successDiv.style.display = 'block';
-                    // Redirect to login after 2 seconds
-                    setTimeout(() => {
-                        window.location.href = 'login.html';
-                    }, 2000);
-                } else {
-                    // Show error
-                    errorDiv.textContent = data.detail || 'Đăng ký thất bại';
-                    errorDiv.style.display = 'block';
+            registerBtn.textContent = 'Đang đăng ký...';
+            registerBtn.disabled = true;
+            
+            // Retry 3 lần cho Supabase cold start
+            const maxRetries = 3;
+            const retryDelays = [1500, 2500, 0];
+            
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    if (attempt > 1) {
+                        registerBtn.textContent = `Đang thử lại (${attempt}/${maxRetries})...`;
+                    }
+                    
+                    const response = await fetch(`${API_BASE}/auth/register`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username, password }),
+                        signal: AbortSignal.timeout(10000)
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // Registration successful
+                        successDiv.textContent = 'Đăng ký thành công! Đang chuyển đến trang đăng nhập...';
+                        successDiv.style.display = 'block';
+                        registerBtn.textContent = 'Đăng ký thành công!';
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 2000);
+                        return;
+                    } else {
+                        // API error (duplicate username etc) - don't retry
+                        errorDiv.textContent = data.detail || 'Đăng ký thất bại';
+                        errorDiv.style.display = 'block';
+                        registerBtn.textContent = 'Đăng ký';
+                        registerBtn.disabled = false;
+                        return;
+                    }
+                } catch (error) {
+                    if (attempt < maxRetries) {
+                        await new Promise(r => setTimeout(r, retryDelays[attempt - 1]));
+                    }
                 }
-            } catch (error) {
-                errorDiv.textContent = 'Lỗi kết nối server. Vui lòng thử lại.';
-                errorDiv.style.display = 'block';
             }
+            
+            errorDiv.textContent = 'Không thể kết nối server. Vui lòng kiểm tra backend đang chạy và thử lại.';
+            errorDiv.style.display = 'block';
+            registerBtn.textContent = 'Đăng ký';
+            registerBtn.disabled = false;
         });
     </script>
 </body>
