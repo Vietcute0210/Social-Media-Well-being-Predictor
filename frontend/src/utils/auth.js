@@ -59,29 +59,35 @@ function isRegularUser() {
 }
 
 /**
- * Logout current user
+ * Logout current user - clear ALL session data
  */
 async function logout() {
     try {
-        // Clear localStorage
+        // 1. Clear ALL localStorage keys related to the app
         localStorage.removeItem(AUTH_STORAGE_KEY);
+        localStorage.removeItem('wellbeing_predictions');
         
-        // Call logout API
+        // 2. Clear sessionStorage completely
+        sessionStorage.clear();
+        
+        // 3. Call logout API to clear server-side session cookie
         await fetch('http://localhost:8000/auth/logout', {
             method: 'POST',
             credentials: 'include'
         });
         
-        console.log('✓ User logged out');
-        
-        // Redirect to login
-        window.location.href = '/login.html';
+        console.log('✓ User logged out - all sessions cleared');
     } catch (error) {
         console.error('Error during logout:', error);
-        // Still clear local data and redirect
+        // Still clear local data
         localStorage.removeItem(AUTH_STORAGE_KEY);
-        window.location.href = '/login.html';
+        localStorage.removeItem('wellbeing_predictions');
+        sessionStorage.clear();
     }
+    
+    // 4. Replace current history entry so back button can't return here
+    //    Then redirect to login page
+    window.location.replace('/login.html');
 }
 
 /**
@@ -91,7 +97,7 @@ async function logout() {
 function requireAuth() {
     if (!isLoggedIn()) {
         console.warn('⚠ Not authenticated, redirecting to login...');
-        window.location.href = '/login.html';
+        window.location.replace('/login.html');
         return false;
     }
     return true;
@@ -104,13 +110,13 @@ function requireAuth() {
 function requireAdmin() {
     if (!isLoggedIn()) {
         console.warn('⚠ Not authenticated, redirecting to login...');
-        window.location.href = '/login.html';
+        window.location.replace('/login.html');
         return false;
     }
     
     if (!isAdmin()) {
         console.warn('⚠ Admin access required, redirecting...');
-        window.location.href = '/index.html';
+        window.location.replace('/index.html');
         return false;
     }
     

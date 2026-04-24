@@ -17,7 +17,7 @@
     <style>
         .help-page {
             min-height: 100vh;
-            padding-top: 80px;
+            padding-top: 0;
             padding-bottom: 60px;
             background: #f5f7fa;
         }
@@ -434,9 +434,6 @@ start_backend_mock.bat
     <script src="../src/components/footer.js"></script>
     
     <script>
-        // Require authentication
-        if (!requireAuth()) {}
-        
         function toggleAccordion(header) {
             const accordion = header.parentElement;
             const allAccordions = document.querySelectorAll('.accordion');

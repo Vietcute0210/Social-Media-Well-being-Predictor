@@ -15,10 +15,17 @@
     <link rel="stylesheet" href="../src/styles.css">
     <link rel="stylesheet" href="../src/header-footer.css">
     
+    <!-- Auth Check -->
+    <script src="../src/utils/auth.js"></script>
+    <script>
+        // Check auth as soon as possible
+        requireAuth();
+    </script>
+    
     <style>
         .history-page {
             min-height: 100vh;
-            padding-top: 80px;
+            padding-top: 0;
             padding-bottom: 60px;
             background: #f5f7fa;
         }

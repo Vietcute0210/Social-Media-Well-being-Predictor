@@ -110,18 +110,10 @@ async def health_check():
 async def predict_wellbeing(user_input: UserInput, request: Request):
     """
     Predict happiness, stress, and persona based on user input
-    (Requires authentication)
-    
-    Args:
-        user_input: UserInput object containing all required features
-    
-    Returns:
-        PredictionResponse with happiness score, stress score, persona, and recommendations
+    (Optional authentication - Guest mode supported)
     """
-    # Check authentication
+    # Try to get session for saving to DB (optional)
     username = request.cookies.get("user_session")
-    if not username:
-        raise HTTPException(status_code=401, detail="Please login to use this feature")
     
     if predictor is None:
         raise HTTPException(
@@ -144,26 +136,30 @@ async def predict_wellbeing(user_input: UserInput, request: Request):
         # Make prediction
         prediction = predictor.predict(encoded_data)
         
-        # Save prediction to database
-        db_gen = get_db()
-        db = next(db_gen)
-        try:
-            # Get user
-            user = db.query(User).filter(User.username == username).first()
-            if user:
-                db_prediction = Prediction(
-                    user_id=user.id,
-                    timestamp=vn_now(),
-                    input_data=user_data,
-                    happiness_score=prediction["happiness_score"],
-                    stress_score=prediction["stress_score"],
-                    persona=prediction["persona"],
-                    recommendations=prediction["recommendations"]
-                )
-                db.add(db_prediction)
-                db.commit()
-        finally:
-            db.close()
+        # Save prediction to database ONLY IF user is logged in
+        if username:
+            db_gen = get_db()
+            db = next(db_gen)
+            try:
+                # Get user
+                user = db.query(User).filter(User.username == username).first()
+                if user:
+                    db_prediction = Prediction(
+                        user_id=user.id,
+                        timestamp=vn_now(),
+                        input_data=user_data,
+                        happiness_score=prediction["happiness_score"],
+                        stress_score=prediction["stress_score"],
+                        persona=prediction["persona"],
+                        recommendations=prediction["recommendations"]
+                    )
+                    db.add(db_prediction)
+                    db.commit()
+            except Exception as db_err:
+                print(f"Error saving prediction to DB: {db_err}")
+                db.rollback()
+            finally:
+                db.close()
         
         return PredictionResponse(**prediction)
     

@@ -154,8 +154,21 @@ document.addEventListener('DOMContentLoaded', function() {
     if (headerContainer) {
         headerContainer.innerHTML = renderHeader();
         initializeNavigation();
+        
+        // Dynamically adjust body padding based on actual header height
+        adjustBodyPadding();
+        window.addEventListener('resize', adjustBodyPadding);
     }
 });
+
+// Adjust body padding to match actual header height
+function adjustBodyPadding() {
+    const header = document.querySelector('.app-header');
+    if (header) {
+        const headerHeight = header.offsetHeight;
+        document.body.style.paddingTop = (headerHeight + 16) + 'px';
+    }
+}
 
 // Initialize navigation functionality
 function initializeNavigation() {

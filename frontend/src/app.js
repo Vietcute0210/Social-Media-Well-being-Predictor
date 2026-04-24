@@ -1,47 +1,8 @@
 // Configuration
 const API_BASE_URL = 'http://localhost:8000';
 
-// Check authentication on page load
-window.addEventListener('DOMContentLoaded', async () => {
-    // First check localStorage - if user exists, don't block immediately
-    const localUser = localStorage.getItem('current_user');
-    
-    // Retry 3 lần với delay tăng dần cho Supabase cold start
-    const maxRetries = 3;
-    const retryDelays = [1500, 2500, 0];
-    
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 10000);
-            
-            const response = await fetch(`${API_BASE_URL}/auth/me`, {
-                credentials: 'include',
-                signal: controller.signal
-            });
-            
-            clearTimeout(timeoutId);
-            
-            if (response.ok) {
-                return; // Authenticated, proceed normally
-            }
-            
-            // Server says not authenticated
-            window.location.href = 'login.html';
-            return;
-        } catch (error) {
-            if (attempt < maxRetries) {
-                await new Promise(r => setTimeout(r, retryDelays[attempt - 1]));
-            }
-        }
-    }
-    
-    // All attempts failed - if no local user, redirect
-    if (!localUser) {
-        window.location.href = 'login.html';
-    }
-    // If there IS a local user, let them continue (graceful degradation)
-});
+// Home page is PUBLIC - no auth check needed on load
+// Auth is only checked when user submits the form (guest popup logic)
 
 // DOM Elements
 const predictionForm = document.getElementById('predictionForm');
@@ -49,6 +10,8 @@ const formSection = document.getElementById('formSection');
 const resultsSection = document.getElementById('resultsSection');
 const submitBtn = document.getElementById('submitBtn');
 const analyzeAgainBtn = document.getElementById('analyzeAgainBtn');
+const guestModal = document.getElementById('guestModal');
+const continueGuestBtn = document.getElementById('continueGuestBtn');
 
 // Result elements
 const happinessScore = document.getElementById('happinessScore');
@@ -58,9 +21,46 @@ const recommendationsList = document.getElementById('recommendationsList');
 const happinessBar = document.getElementById('happinessBar');
 const stressBar = document.getElementById('stressBar');
 
+// Track if user chose to continue as guest
+let isGuestMode = false;
+
+// Handle "Continue as guest" button
+if (continueGuestBtn) {
+    continueGuestBtn.addEventListener('click', () => {
+        isGuestMode = true;
+        if (guestModal) guestModal.style.display = 'none';
+        // Now actually submit the form
+        predictionForm.requestSubmit();
+    });
+}
+
+// Close modal if user clicks overlay
+if (guestModal) {
+    const overlay = guestModal.querySelector('.modal-overlay');
+    if (overlay) {
+        overlay.addEventListener('click', () => {
+            guestModal.style.display = 'none';
+        });
+    }
+}
+
 // Form submission handler
 predictionForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    // Check if user is logged in
+    const user = localStorage.getItem('current_user');
+    
+    // If NOT logged in and NOT yet chosen guest mode → show popup
+    if (!user && !isGuestMode) {
+        if (guestModal) {
+            guestModal.style.display = 'flex';
+        }
+        return; // Wait for user's decision
+    }
+    
+    // Hide modal if still visible
+    if (guestModal) guestModal.style.display = 'none';
     
     // Show loading state
     setLoadingState(true);

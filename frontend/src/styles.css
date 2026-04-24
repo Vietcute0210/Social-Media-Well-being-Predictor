@@ -65,6 +65,7 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
+    /* padding-top is set dynamically by header.js based on actual header height */
 }
 
 /* Pink Gradient Background with Floating Shapes */
@@ -737,3 +738,91 @@ html {
     outline: 2px solid var(--instagram-pink);
     outline-offset: 2px;
 }
+
+/* ========================================
+   MODAL & POPUP STYLES
+   ======================================== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: var(--bg-card);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalPop {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-title {
+    font-size: 1.8rem;
+    background: var(--instagram-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: var(--spacing-md);
+    background-clip: text;
+}
+
+.modal-description {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1.6;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.modal-auth-options {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.modal-auth-options .btn {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    font-size: 0.95rem;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--instagram-pink);
+    color: var(--instagram-pink);
+}
+
+.btn-outline:hover {
+    background: rgba(225, 48, 108, 0.05);
+}
+

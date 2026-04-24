@@ -35,7 +35,7 @@ async function loadHistoryFromAPI() {
         
         if (!response.ok) {
             if (response.status === 401) {
-                window.location.href = '../login.html';
+                window.location.replace('../login.html');
                 return;
             }
             throw new Error('Failed to load history');

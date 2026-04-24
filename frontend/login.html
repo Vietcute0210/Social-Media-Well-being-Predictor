@@ -92,6 +92,11 @@
         const API_BASE = 'http://localhost:8000';
         let serverReady = false;
 
+        // Redirect if already logged in
+        if (typeof isLoggedIn === 'function' && isLoggedIn()) {
+            window.location.replace('index.html');
+        }
+
         // Pre-warm: gọi health check ngay khi trang load để đánh thức Supabase
         (async function warmUpServer() {
             try {

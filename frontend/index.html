@@ -282,17 +282,27 @@
     <!-- Footer -->
     <div id="footerContainer"></div>
 
+    <!-- Guest Alert Modal -->
+    <div id="guestModal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <h3 class="modal-title">🌟 Chế độ Khách (Guest)</h3>
+            <p class="modal-description">Bạn có thể xem kết quả phân tích ngay bây giờ. Tuy nhiên, để <strong>lưu lại lịch sử</strong> và xem các xu hướng sức khỏe lâu dài, hãy đăng nhập hoặc tạo tài khoản nhé!</p>
+            <div class="modal-actions">
+                <button id="continueGuestBtn" class="btn btn-secondary">Tiếp tục với tài khoản Khách</button>
+                <div class="modal-auth-options">
+                    <a href="login.html" class="btn btn-primary">Đăng nhập ngay</a>
+                    <a href="register.html" class="btn btn-secondary" style="border: 1px solid var(--instagram-pink)">Đăng ký</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="src/components/header.js"></script>
     <script src="src/components/footer.js"></script>
     <script src="src/utils/auth.js"></script>
     <script src="src/utils/storage.js"></script>
     <script src="src/app.js"></script>
-    <script>
-        // Require authentication
-        if (!requireAuth()) {
-            // Will redirect to login automatically
-        }
-    </script>
 </body>
 </html>

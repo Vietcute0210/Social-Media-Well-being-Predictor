@@ -15,9 +15,9 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String, nullable=False)
-    role = Column(String, default="user", nullable=False)  # 'admin' or 'user'
+    username = Column(String(255), unique=True, index=True, nullable=False)
+    hashed_password = Column(String(255), nullable=False)
+    role = Column(String(50), default="user", nullable=False)  # 'admin' or 'user'
     created_at = Column(DateTime(timezone=True), default=vn_now, nullable=False)
     
     # Relationship
@@ -37,7 +37,7 @@ class Prediction(Base):
     # Output results
     happiness_score = Column(Float)
     stress_score = Column(Float)
-    persona = Column(String)
+    persona = Column(String(100))
     recommendations = Column(JSON)
     
     # Relationship

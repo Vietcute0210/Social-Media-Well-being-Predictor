@@ -100,8 +100,14 @@
         </div>
     </div>
 
+    <script src="src/utils/auth.js"></script>
     <script>
         const API_BASE = 'http://localhost:8000';
+
+        // Redirect if already logged in
+        if (typeof isLoggedIn === 'function' && isLoggedIn()) {
+            window.location.replace('index.html');
+        }
 
         // Pre-warm server
         fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(8000) }).catch(() => {});
