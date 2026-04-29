@@ -55,5 +55,4 @@ models/
 
 # Dataset
 *.csv
-
-*.ipynb
+Instagram.ipynb
